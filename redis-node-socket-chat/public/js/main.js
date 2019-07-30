@@ -67,6 +67,27 @@ $(function () {
             }
         });
     });
+    $('#clear-chat').click(function () {
+        console.log('Clear chat pressed');
+        $.ajax({
+            url: '/clearRoom',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+            },
+            success: function (response) {
+                if (response.status == 'OK') {
+                     socket.emit('update_chatter_count', {
+                         'action': 'clear'
+                     });
+                    alert('Chat Room Cleared');
+                }
+                else{
+                    console.log('Error: During clearing');
+                }
+            }
+        });
+    });
     $('#send-message').click(function () {
         var username = $(this).data('username');
         var message = $.trim($('#message').val());
@@ -96,7 +117,10 @@ $(function () {
         $('.messages').append(html);
     });
     socket.on('count_chatters', function (data) {
-        if (data.action == 'increase') {
+        if(data.action == 'clear'){
+            chatter_count = 0;
+        }
+        else if (data.action == 'increase') {
             chatter_count++;
         } else {
             chatter_count--;

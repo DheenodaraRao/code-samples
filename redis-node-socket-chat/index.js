@@ -91,6 +91,17 @@ app.post('/leave', function (req, res) {
     });
 });
 
+// API - Leave Chat
+app.post('/clearRoom', function (req, res) {
+    //chatters.splice(chatters.indexOf(username), 1);
+    //client.set('chat_users', JSON.stringify([]));
+    console.log('In /clearRoom')
+    client.DEL('chat_users', 'chat_app_messages');
+    res.send({
+        'status': 'OK'
+    });
+});
+
 // API - Send + Store Message
 app.post('/send_message', function (req, res) {
     var username = req.body.username;
